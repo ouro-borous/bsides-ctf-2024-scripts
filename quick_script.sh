@@ -1,12 +1,13 @@
 #!/bin/bash
-while getopts s:h:m:n:j flag
+while getopts s:h:m:n:j:i: flag
 do
     case "${flag}" in
         s) ssh_port=${OPTARG};;
         h) http_port=${OPTARG};;
         m) mysql_port=${OPTARG};;
-	      n) snmp_port=${OPTARG};;
-	      j) java_port=${OPTARG};;
+	n) snmp_port=${OPTARG};;
+	j) java_port=${OPTARG};;
+ 	i) my_ip=${OPTARG};;
     esac
 done
 
@@ -14,6 +15,7 @@ done
 #BAN EM ALL
 sudo apt install iptables
 sudo iptables -A INPUT -s 172.17.0.0/24 -j DROP
+sudo iptables -A INPUT -s $my_ip -j ACCEPT
 sudo iptables -A INPUT -s 172.17.0.1 -j ACCEPT
 sudo iptables -A OUTPUT -d 172.17.0.1 -j ACCEPT
 sudo iptables -A INPUT -s 3.85.128.64 -j ACCEPT
